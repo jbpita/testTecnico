@@ -6,6 +6,10 @@ docker up -d
 
 se puede levantar sin docker tambien
 
+ver la documentación del api
+'http://localhost:8080/swagger/index.html'
+
+
 ## frontend
 
 $ cd frontendProject
