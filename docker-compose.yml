@@ -1,0 +1,43 @@
+version: '3.8'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  sqlserver:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: YourStrongPass@2023!
+    volumes:
+      - sql_data:/var/opt/mssql
+      - ./db/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: dotnet_api
+    ports:
+      - 8080:8080
+      - 8081:8081
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=TestDB;User Id=sa;Password=YourStrongPass@2023!;Encrypt=False;TrustServerCertificate=True;"
+    depends_on:
+      - sqlserver
+    networks:
+      - app-network
+
+volumes:
+  sql_data:
+    driver: local
+

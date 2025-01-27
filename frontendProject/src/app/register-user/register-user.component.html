@@ -1,0 +1,22 @@
+<app-notification #notification></app-notification>
+<div class="container mx-auto p-4">
+  <h2 class="text-2xl mb-4">Registrar Usuario</h2>
+  <form (ngSubmit)="onSubmit()" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
+    <div class="mb-4">
+      <label for="usuario" class="block text-gray-700">Usuario:</label>
+      <input type="text" id="usuario" [(ngModel)]="usuario.usuario" name="usuario" required class="mt-1 p-2 w-full border rounded">
+    </div>
+
+    <div class="mb-4">
+      <label for="pass" class="block text-gray-700">Ingrese una Contraseña:</label>
+      <input type="password" id="pass" [(ngModel)]="usuario.pass" name="pass" required class="mt-1 p-2 w-full border rounded">
+    </div>
+
+    <div class="mb-4">
+      <label for="pass" class="block text-gray-700">Ingrese nuevamente la Contraseña:</label>
+      <input type="password" id="rptpass" [(ngModel)]="rptPassword" name="pass" required class="mt-1 p-2 w-full border rounded">
+    </div>
+
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded">Registrar</button>
+  </form>
+</div>

@@ -1,0 +1,117 @@
+<div class="container mx-auto p-4">
+  <app-notification #notification></app-notification>
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <button
+        *ngIf="isLoggedIn"
+        (click)="login()"
+        class="bg-blue-500 text-white p-2 rounded"
+      >
+        Login
+      </button>
+      <button
+        *ngIf="!isLoggedIn"
+        (click)="logout()"
+        class="bg-red-500 text-white p-2 rounded"
+      >
+        Logout
+      </button>
+      <form (ngSubmit)="onSubmit()" class="max-w-md mx-auto my-5 bg-white p-8 rounded shadow-md">
+        <div class="mb-4">
+          <label for="nombres" class="block text-gray-700">Nombres:</label>
+          <input type="text" id="nombres" [(ngModel)]="persona.nombres" name="nombres" required class="mt-1 p-2 w-full border rounded">
+        </div>
+
+        <div class="mb-4">
+          <label for="apellidos" class="block text-gray-700">Apellidos:</label>
+          <input type="text" id="apellidos" [(ngModel)]="persona.apellidos" name="apellidos" required class="mt-1 p-2 w-full border rounded">
+        </div>
+
+        <div class="mb-4">
+          <label for="identificacion" class="block text-gray-700">Número de Identificación:</label>
+          <input type="text" id="identificacion" [(ngModel)]="persona.numeroIdentificacion" name="identificacion" required class="mt-1 p-2 w-full border rounded">
+        </div>
+
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700">Email:</label>
+          <input type="email" id="email" [(ngModel)]="persona.email" name="email" required class="mt-1 p-2 w-full border rounded">
+        </div>
+
+        <div class="mb-4">
+          <label for="tipoIdentificacion" class="block text-gray-700">Tipo de Identificación:</label>
+          <input type="text" id="tipoIdentificacion" [(ngModel)]="persona.tipoIdentificacion" name="tipoIdentificacion" required class="mt-1 p-2 w-full border rounded">
+        </div>
+
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded">{{ isLoggedIn ? 'Editar' : 'Guardar' }}</button>
+      </form>
+    </div>
+
+    <div *ngIf="isLoggedIn">
+      <div class="mb-4">
+        <input type="text" [(ngModel)]="pagination.Search.Nombres" (ngModelChange)="onSearchChange()" placeholder="Buscar..." class="mt-1 p-2 w-full border rounded">
+      </div>
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2">Nombres</th>
+            <th class="py-2">Apellidos</th>
+            <th class="py-2">Tipo de Identificación</th>
+            <th class="py-2">Identificación</th>
+            <th class="py-2">Email</th>
+            <th class="py-2">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let persona of personas">
+            <td class="py-2">{{ persona.nombres }}</td>
+            <td class="py-2">{{ persona.apellidos }}</td>
+            <td class="py-2 px-4">{{ persona.tipoIdentificacion }}</td>
+            <td class="py-2">{{ persona.numeroIdentificacion }}</td>
+            <td class="py-2">{{ persona.email }}</td>
+            <td class="py-2 flex space-x-2">
+              <button
+                (click)="registerUser(persona.identificador)"
+                class="bg-blue-500 text-white p-2 rounded-full flex items-center justify-center hover:bg-blue-600 focus:ring focus:ring-blue-300"
+                title="Registrar Usuario"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A10.05 10.05 0 0112 14c2.5 0 4.77.93 6.621 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+              <button
+                (click)="editPersona(persona)"
+                class="bg-yellow-500 text-white p-2 rounded-full flex items-center justify-center hover:bg-yellow-600 focus:ring focus:ring-yellow-300"
+                title="Editar Persona"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2v-5m-6-4l4 4m0 0l-4-4m4 4L13 9" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-4">
+        Numero de Pagina: {{ pagination.PageNumber }},
+        <button (click)="previousPage()" [disabled]="pagination.PageNumber === 1" class="bg-gray-300 text-gray-700 p-2 rounded">Anterior</button>
+        <button (click)="nextPage()" class="bg-gray-300 text-gray-700 p-2 rounded mx-2">Siguiente</button>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoggedIn">
+      <form (ngSubmit)="onSubmitUser()" class="max-w-md mx-auto my-5 bg-white p-8 rounded shadow-md">
+        <div class="mb-4">
+          <label for="usuario" class="block text-gray-700">Usuario:</label>
+          <input type="text" id="usuario" [(ngModel)]="usuario.usuario" name="usuario" required class="mt-1 p-2 w-full border rounded">
+        </div>
+
+        <div class="mb-4">
+          <label for="pass" class="block text-gray-700">Contraseña:</label>
+          <input type="password" id="pass" [(ngModel)]="usuario.pass" name="pass" required class="mt-1 p-2 w-full border rounded">
+        </div>
+
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Editar Usuario</button>
+      </form>
+    </div>
+  </div>
+</div>
